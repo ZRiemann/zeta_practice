@@ -1,0 +1,166 @@
+#+STARTUP: indent
+#+TITLE: zeta_practice Architecture
+
+[[file:../zh-CN/architecture.org][Chinese Version]] | [[file:./readme.org][Back to English Documentation]]
+
+* Scope
+
+This document defines the initial architectural boundaries. The design favors
+the smallest system that can provide reliable multi-user Web practice and can
+later accept additional practice modules without rewriting the application shell.
+
+* System Shape
+
+The initial production shape is one deployable application:
+
+#+begin_src text
+Browser
+  |
+  | HTTPS
+  v
+zeta_practice
+  |- Dioxus Web UI / browser-side practice state
+  |- authentication and session handling
+  |- application services
+  |- typing module
+  |- persistence/repositories
+  v
+SQLite on persistent storage
+#+end_src
+
+Do not split frontend, backend, auth, statistics, or typing into independent
+network services in the initial system.
+
+Actual host provisioning, reverse proxy, certificates, service deployment, and
+operations belong to =zsa=. This repository owns the application runtime
+contract and application container/build artifacts when they are introduced.
+
+* Client and Server Boundary
+
+** Browser owns latency-sensitive interaction
+
+For typing, keyboard events, target matching, elapsed-time measurement, current
+progress, and immediate Accuracy/WPM display run locally in the browser.
+
+There must be no server request for each keystroke.
+
+A typical session flow is:
+
+#+begin_src text
+server -> practice specification/content -> browser
+browser -> local practice loop -> result summary
+browser -> completed result -> server
+server -> persist history -> update statistics/profile
+#+end_src
+
+Short network outages therefore do not change keystroke latency. A failed final
+submission should remain retryable without implementing a full offline-sync
+engine in v0.2.0.
+
+** Server owns authoritative account and persistent state
+
+The server owns:
+
+- user identity and authentication;
+- server-side login sessions;
+- persisted practice history;
+- per-user long-term statistics;
+- adaptive profile state and next-practice policy inputs;
+- database migration and validation.
+
+The browser is not trusted to access SQLite directly.
+
+* Practice Module Boundary
+
+The application shell owns only stable cross-module concerns:
+
+- routing and top-level navigation;
+- authentication and current user;
+- localization;
+- application configuration;
+- persistence infrastructure.
+
+The =typing= module owns:
+
+- practice types and generated/static content;
+- typing session semantics;
+- Accuracy/WPM/error definitions;
+- character weakness statistics;
+- typing profile and adaptive rules;
+- typing-specific UI.
+
+Do not create a generic =practice_core::skill/mastery/curriculum= framework in
+v0.2.0. Extract shared capability only after a second real module demonstrates
+the same ownership and behavior.
+
+* Authentication and User Model
+
+The initial system supports multiple users with password authentication.
+
+Passwords are never stored directly. Production implementation must use a
+reviewed password-hashing algorithm such as Argon2id and server-side sessions.
+Browser authentication should use secure cookies with appropriate =HttpOnly=,
+=Secure=, and =SameSite= settings when deployed over HTTPS.
+
+Role handling should remain minimal. A future parent/admin role may manage
+student accounts and inspect statistics, but v0.2.0 must not introduce a large
+RBAC framework.
+
+* Internationalization
+
+UI locale and practice-content locale are separate values. A user may use a
+Chinese UI while practicing English typing content.
+
+Initial UI locales:
+
+- =zh-CN=
+- =en-US=
+
+Do not hard-code user-facing strings inside unrelated domain logic.
+
+* Persistence
+
+SQLite is the initial server database.
+
+Reasons:
+
+- the expected initial workload is small;
+- one server instance is sufficient;
+- deployment and backup remain simple;
+- the storage boundary can later migrate without changing typing domain rules.
+
+The database file must live on persistent storage, not ephemeral container
+storage. Database access is isolated behind repository/storage code.
+
+PostgreSQL, Redis, distributed caches, message queues, and multi-node database
+coordination are explicitly outside the initial architecture.
+
+* Rust and Third-party Dependency Governance
+
+=zeta_forge= is the authority for ZetaX Rust toolchains and public third-party
+Rust dependency versions.
+
+The current forge baseline is selected by a project-local =zeta-rust.toml=.
+The project owns its Rust source, workspace members, application features, and
+committed =Cargo.lock=. Workspace members inherit managed direct dependencies
+with =workspace = true= and must match the forge baseline.
+
+Cargo remains the Rust resolver/build tool; it is not an independent dependency
+governance source for ZetaX projects.
+
+If a required public crate, feature baseline, or Dioxus target group is absent
+from =zeta_forge=, extend and validate =zeta_forge= first. Do not work around
+that gap by pinning a competing direct dependency baseline in =zeta_practice=.
+
+As of the v0.1.0 planning baseline, forge provides Dioxus 0.7.10 through a
+=dioxus-desktop= group but does not yet provide the required Web/Fullstack
+group. That is a prerequisite for v0.2.0 implementation.
+
+* Evolution Rules
+
+- Prefer one application and one database while that remains sufficient.
+- Keep typing domain behavior testable without a browser or database where practical.
+- Keep Dioxus rendering concerns at the outer UI boundary.
+- Keep external representations and persistence records out of core typing calculations.
+- Introduce extension points only for demonstrated variation.
+- Document and migrate database schema changes explicitly.

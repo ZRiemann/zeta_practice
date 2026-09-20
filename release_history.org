@@ -1,0 +1,21 @@
+#+STARTUP: indent
+#+TITLE: zeta_practice Release History
+
+[[file:./doc/zh-CN/release_history.org][Chinese translation]]
+
+* Release History
+
+** v0.1.0 - 2026-09-20
+*** Release Summary
+- Establish the initial project definition and architecture baseline for a Web-first, multi-user skill practice platform.
+
+*** Changes
+- Defined the product scope around practice, measurement, feedback, and capability improvement rather than basic instructional content.
+- Selected a Web-first Rust/Dioxus direction with a browser-local practice hot path and server-side authentication, persistence, statistics, and adaptive profile state.
+- Kept SQLite as the initial server database and documented a single-service deployment model with persistent storage.
+- Defined independent practice-module ownership and deferred a generic practice framework until a second real module demonstrates shared abstractions.
+- Adopted the ZetaX Rust governance model: public Rust dependencies and toolchains are managed by =zeta_forge= while this repository owns application source, workspace structure, feature choices, and =Cargo.lock=.
+- Added the =v0.2.0= typing MVP implementation plan, including the required =zeta_forge= Web/Fullstack dependency-baseline prerequisite.
+
+*** Compatibility and Upgrade Notes
+- This is a documentation and project-baseline release. No production application, database schema, public API, or deployment artifact exists yet.

@@ -1,0 +1,36 @@
+#+STARTUP: indent
+#+TITLE: zeta_practice Documentation
+
+[[file:../zh-CN/readme.org][中文文档]] | [[file:../../readme.org][Back to project root]]
+
+* Purpose
+
+=zeta_practice= is a ZetaX application for focused, repeatable skill practice.
+It is intentionally narrower than a learning-management system or tutoring
+platform. Basic concepts may be taught by a parent, teacher, or other material;
+the software concentrates on practice sessions, measurable results, history,
+and adaptive improvement.
+
+The first concrete module is =typing=. Later modules may cover attention,
+mathematics, language, memory, or other practice domains, but future scope must
+not force premature abstractions into the first implementation.
+
+* Product Principles
+
+- Web first: users should access the service through a browser from multiple devices.
+- Cloud deployable: user state is centralized on the server rather than tied to one desktop machine.
+- Multi-user: users authenticate with passwords and retain independent history.
+- Bilingual UI: Chinese and English UI are first-class; content language is a separate concern.
+- Module independence: each practice domain owns its domain rules, statistics, and adaptive policy.
+- Small-system bias: prefer a simple monolith and explicit modules over microservices or speculative frameworks.
+- Data minimization: collect only data needed for authentication, practice history, statistics, and improvement.
+
+* Version Roadmap
+
+** v0.1.0
+Project definition, architecture, dependency governance, and v0.2.0 plan.
+
+** v0.2.0
+First functional Web application and typing practice MVP.
+
+The typing MVP is defined in [[file:./typing_v0.2_plan.org][typing_v0.2_plan.org]].

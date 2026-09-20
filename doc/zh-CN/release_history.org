@@ -1,0 +1,21 @@
+#+STARTUP: indent
+#+TITLE: zeta_practice 发布历史
+
+[[file:../../release_history.org][English version]]
+
+* 发布历史
+
+** v0.1.0 - 2026-09-20
+*** 发布定位摘要
+- 建立 Web-first、多用户能力练习平台的首个项目定义与架构基线。
+
+*** 变更
+- 将产品范围明确为练习、测量、反馈和能力提升，不承担基础常识与基础操作教学。
+- 确立 Rust/Dioxus Web-first 技术方向：打字输入热路径在浏览器本地执行，服务端负责认证、持久化、统计和自适应能力状态。
+- 首阶段继续使用服务端 SQLite，并定义单服务部署和持久卷数据边界。
+- 定义教学/练习子系统自治边界；在第二个真实模块出现之前，不预先抽象庞大的通用 practice framework。
+- 采用 ZetaX Rust 依赖治理：公共 Rust 依赖版本和工具链由 =zeta_forge= 统一管理，本仓库只拥有业务源码、workspace 结构、feature 组合和 =Cargo.lock=。
+- 增加 =v0.2.0= typing MVP 实施计划，并明确先在 =zeta_forge= 补齐 Web/Fullstack 依赖基线这一前置条件。
+
+*** 兼容与升级说明
+- 本版本仅包含项目文档和架构基线；尚无生产应用、数据库 schema、公共 API 或部署产物。

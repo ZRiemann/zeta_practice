@@ -1,0 +1,46 @@
+#+STARTUP: indent
+#+TITLE: zeta_practice - Web-first Skill Practice Platform
+
+[[file:./doc/en/readme.org][English Documentation]] | [[file:./doc/zh-CN/readme.org][中文文档]]
+
+=zeta_practice= is a Web-first, multi-user practice platform in the ZetaX
+workspace. It focuses on repeated practice, measurable feedback, and gradual
+skill improvement rather than replacing basic human instruction.
+
+The first planned practice module is =typing=.
+
+* Current Status
+
+Version =v0.1.0= establishes the project definition, architecture boundaries,
+dependency policy, and the implementation plan for the =v0.2.0= typing MVP.
+It intentionally contains no production Rust/Dioxus application code yet.
+
+* Product Direction
+
+- Web first and cloud deployable.
+- Multi-user with password authentication.
+- Chinese and English UI.
+- Independent and extensible practice modules.
+- Server-side persistent data with SQLite as the initial database.
+- Browser-local typing hot path; no per-keystroke network round trips.
+- Simple, explainable adaptive practice rather than a large curriculum engine.
+
+* Technology Direction
+
+The intended implementation stack is Rust + Dioxus Web/Fullstack + SQLite.
+The application should remain a small deployable monolith until measured scale
+or operational requirements justify a more complex topology.
+
+Rust public dependency versions and toolchains are governed centrally by
+=zeta_forge=. This repository owns its application source, workspace structure,
+feature choices, and =Cargo.lock=, but it must not establish a competing
+third-party Rust dependency baseline.
+
+* Documentation
+
+- [[file:./doc/en/architecture.org][Architecture]]
+- [[file:./doc/en/typing_v0.2_plan.org][v0.2.0 Typing Implementation Plan]]
+- [[file:./release_history.org][Release History]]
+- [[file:./doc/zh-CN/readme.org][中文项目说明]]
+- [[file:./doc/zh-CN/architecture.org][中文架构说明]]
+- [[file:./doc/zh-CN/typing_v0.2_plan.org][v0.2.0 Typing 实施计划]]
