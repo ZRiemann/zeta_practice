@@ -137,8 +137,9 @@ Cargo 仍然负责 Rust 依赖解析和构建，但不是 ZetaX 的独立依赖�
 如果需要的公共 crate、feature 基线或 Dioxus target group 尚未进入 =zeta_forge=，
 必须先扩展并验证 =zeta_forge=，不能在 =zeta_practice= 中建立另一套直接依赖版本基线。
 
-v0.1.0 规划基线中，forge 已管理 Dioxus 0.7.10，但当前只有 =dioxus-desktop= 组，
-尚无本项目需要的 Web/Fullstack 组。因此补齐 forge Web/Fullstack 基线是 Phase 1 的前置任务。
+在 v0.2.0 Stage 1.1 交付中，forge 通过 =dioxus-web-fullstack= 组管理 Dioxus
+0.7.10，并在选择该能力时检查固定版本的 Dioxus CLI 与 Web Rust target。应用拥有自己的
+=web= 和 =server= feature 组合。
 
 * 演进原则
 

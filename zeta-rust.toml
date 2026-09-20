@@ -1,0 +1,7 @@
+schema = 1
+baseline = "2026.09"
+manifest = "Cargo.toml"
+toolchain = "rust-toolchain.toml"
+default-profile = "dev"
+dependency-groups = ["dioxus-web-fullstack"]
+native-dependencies = []

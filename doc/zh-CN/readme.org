@@ -25,13 +25,14 @@
 
 * 当前版本
 
-=v0.1.0= 建立项目定义、架构、依赖治理和初始规划基线，尚无正式 Rust/Dioxus 应用。
+=v0.2.0= 交付 Stage 1.1 的 forge 受管 Rust/Dioxus Web/Fullstack 应用基础、基本路由及
+zh-CN/en-US 界面切换。
 实际版本化变更见 [[file:./release_history.org][发布历史]]。
 
 * Phase 路线
 
 =Phase 1 - Typing= 通过 Stage 1.1-1.12 交付首个完整 Web typing 练习闭环，并单独记录
-=zeta_forge= 前置依赖。所有应用 Stage 均待实施，尚无验收证据，也未分配交付版本。
+=zeta_forge= 前置依赖。Stage 1.1 已在 =v0.2.0= 交付，Stage 1.2-1.12 仍为规划状态。
 Phase 标识与发布版本相互独立。
 
 目标、边界、Stage 依赖、验收条件及旧规划映射见

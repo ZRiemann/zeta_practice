@@ -1,0 +1,15 @@
+[workspace]
+members = ["app"]
+resolver = "2"
+
+[workspace.metadata.zeta-forge]
+baseline = "2026.09"
+
+[workspace.package]
+version = "0.2.0"
+edition = "2024"
+rust-version = "1.97"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+dioxus = { version = "=0.7.10", default-features = false, features = ["lib", "launch", "logger"] }

@@ -5,6 +5,19 @@
 
 * 发布历史
 
+** v0.2.0 - 2026-09-20
+*** 发布定位摘要
+- 交付 Phase 1 Stage 1.1，建立首个可运行的 Rust/Dioxus Web/Fullstack 应用基础。
+
+*** 变更
+- 增加 forge 受管的 Rust 1.97.1 workspace、单个 application member 及提交到仓库的 Cargo lockfile。
+- 增加类型安全的首页/About 路由及响应式 zh-CN/en-US 双语应用外壳。
+- 采用 forge 新增的 =dioxus-web-fullstack= 依赖组，并通过根目录 toolchain override 保证 Cargo 与 Dioxus CLI 工具链一致。
+- 记录 forge doctor、离线 locked metadata、check、test、fullstack 启动、HTTP 路由及浏览器 locale 交互验收证据。
+
+*** 兼容与升级说明
+- 本版本只增加应用基础；认证、数据库持久化和 typing 行为仍明确不包含在内。
+
 ** v0.1.1 - 2026-09-20
 *** 发布定位摘要
 - 将 typing 路线重构为独立于发布版本编号、以验收为驱动的 Phase 1 与分阶段计划。

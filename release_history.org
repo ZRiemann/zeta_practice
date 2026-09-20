@@ -5,6 +5,19 @@
 
 * Release History
 
+** v0.2.0 - 2026-09-20
+*** Release Summary
+- Deliver Phase 1 Stage 1.1 with the first runnable Rust/Dioxus Web/Fullstack application foundation.
+
+*** Changes
+- Added a forge-managed Rust 1.97.1 workspace with one application member and a committed Cargo lockfile.
+- Added typed Home and About routes with a responsive bilingual zh-CN/en-US application shell.
+- Adopted the new forge =dioxus-web-fullstack= dependency group and root toolchain override for Cargo and Dioxus CLI consistency.
+- Recorded Stage 1.1 acceptance evidence from forge doctor, offline locked metadata, check, test, fullstack startup, HTTP routes, and browser locale interaction.
+
+*** Compatibility and Upgrade Notes
+- This release adds the application foundation only; authentication, database persistence, and typing behavior remain intentionally absent.
+
 ** v0.1.1 - 2026-09-20
 *** Release Summary
 - Reframe the typing roadmap as Phase 1 with acceptance-driven Stages independent of release-version numbering.

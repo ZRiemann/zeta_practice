@@ -6,10 +6,11 @@
 * Phase record
 
 - Identifier: =Phase 1=; owner: =zeta_practice=.
-- Status: =Planned=; no application Stage has been implemented or accepted.
-- Completion evidence: none; all Stage acceptance checks remain unrun.
-- Actual delivery version: unset. Current project =VERSION= is =v0.1.0=,
-  the documentation baseline, not a delivery of the typing application.
+- Status: =In progress=; Stage 1.1 is delivered and Stages 1.2-1.12 remain planned.
+- Completion evidence: Stage 1.1 evidence is recorded below; Phase integration
+  acceptance remains unrun.
+- Actual delivery version: unset; Phase 1 is not complete. Current project
+  =VERSION= is =v0.2.0= for the Stage 1.1 delivery.
 
 Phase identity is independent of release versions. Each Stage below is one
 cohesive agent task including implementation, verification, documentation, and
@@ -56,8 +57,12 @@ Do not include in Phase 1:
 
 * External prerequisite F1 - Zeta Forge
 
-- Owner: =zeta_forge=. Status: =Planned=. Acceptance evidence: none.
-- Actual upstream delivery version: unset.
+- Owner: =zeta_forge=. Status: =Accepted= in the current local checkout.
+- Acceptance evidence: forge commit =ac4f834= adds =dioxus-web-fullstack= and
+  group-specific doctor checks; =python3 -m unittest tests.test_rust_workspace=
+  passed 8 tests.
+- Actual upstream delivery version: unset; the forge change is committed but
+  has not received a separate release version in this task.
 
 Before adding production Cargo manifests to this repository:
 
@@ -96,9 +101,13 @@ An upstream delivery does not automatically bump the zeta_practice version.
 
 - Owner: =zeta_practice=.
 - Dependencies: External prerequisite F1.
-- Status: =Planned=.
-- Completion evidence: none; acceptance checks unrun.
-- Actual delivery version: unset.
+- Status: =Delivered=.
+- Completion evidence: forge =rust doctor= and locked offline =rust metadata=
+  passed; forge =rust check --profile dev= and =rust test --profile dev= passed
+  with one application test; =dx serve --fullstack true= built and started the
+  Web client and server; HTTP checks returned 200 for =/= and =/about=; browser
+  interaction verified zh-CN, en-US switching, and English About navigation.
+- Actual delivery version: =v0.2.0=.
 
 ** Deliverable and boundary
 
@@ -350,8 +359,7 @@ Suggested logical source layout:
 Cargo.toml
 Cargo.lock
 zeta-rust.toml
-rust/
-  rust-toolchain.toml
+rust-toolchain.toml
 app/
   Cargo.toml
   src/

@@ -152,9 +152,10 @@ If a required public crate, feature baseline, or Dioxus target group is absent
 from =zeta_forge=, extend and validate =zeta_forge= first. Do not work around
 that gap by pinning a competing direct dependency baseline in =zeta_practice=.
 
-As of the v0.1.0 planning baseline, forge provides Dioxus 0.7.10 through a
-=dioxus-desktop= group but does not yet provide the required Web/Fullstack
-group. That is a prerequisite for Phase 1 implementation.
+For the v0.2.0 Stage 1.1 delivery, forge provides Dioxus 0.7.10 through the
+=dioxus-web-fullstack= group and validates the pinned Dioxus CLI plus Web Rust
+target when that capability is selected. The application owns its =web= and
+=server= feature composition.
 
 * Evolution Rules
 
