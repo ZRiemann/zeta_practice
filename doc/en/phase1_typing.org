@@ -1,0 +1,595 @@
+#+STARTUP: indent
+#+TITLE: zeta_practice Phase 1 - Typing
+
+[[file:../zh-CN/phase1_typing.org][Chinese Version]] | [[file:./readme.org][Back to English Documentation]]
+
+* Phase record
+
+- Identifier: =Phase 1=; owner: =zeta_practice=.
+- Status: =Planned=; no application Stage has been implemented or accepted.
+- Completion evidence: none; all Stage acceptance checks remain unrun.
+- Actual delivery version: unset. Current project =VERSION= is =v0.1.0=,
+  the documentation baseline, not a delivery of the typing application.
+
+Phase identity is independent of release versions. Each Stage below is one
+cohesive agent task including implementation, verification, documentation, and
+handoff. Dependencies are explicit; numbering alone does not require serial
+execution. Oversized work must become sibling Stages with replacement mappings,
+without silently renumbering already referenced identifiers.
+
+The shared =zetax-planning= skill in =zsa/agents/zetax/skills/= owns the common
+planning and delivery-version rules. Record actual acceptance evidence and
+versions here as work is delivered; do not allocate Minor versions in advance.
+Required checks that have not run prevent acceptance. Accepted work without a
+version update is recorded as awaiting versioned delivery.
+
+* Goal
+
+=Phase 1= should deliver the first complete usable loop:
+
+#+begin_src text
+open Web app
+  -> authenticate
+  -> start typing practice
+  -> practice locally in browser
+  -> finish and submit result
+  -> persist result
+  -> update statistics/profile
+  -> generate the next practice from current ability
+#+end_src
+
+The typing module is a practice system, not a basic keyboard tutorial.
+It assumes key positions, finger usage, posture, and other fundamentals are
+taught externally.
+
+* Explicit Non-goals
+
+Do not include in Phase 1:
+
+- key-position or finger-placement lessons;
+- curriculum trees, mastery graphs, or lesson unlock systems;
+- game economies, leaderboards, social features, or achievements;
+- AI tutors or model-based recommendation;
+- offline synchronization;
+- PostgreSQL, Redis, queues, or microservices;
+- complex parent-management/RBAC workflows.
+
+* External prerequisite F1 - Zeta Forge
+
+- Owner: =zeta_forge=. Status: =Planned=. Acceptance evidence: none.
+- Actual upstream delivery version: unset.
+
+Before adding production Cargo manifests to this repository:
+
+1. Extend =zeta_forge/rust/baseline.toml= with a reviewed Dioxus Web/Fullstack dependency group.
+2. Keep the existing managed Dioxus version policy or intentionally upgrade it in =zeta_forge= first.
+3. Add any required server, SQLite, password-hashing, serialization, time, or migration crates to forge governance before use.
+4. Validate the forge Rust baseline and its own tests.
+
+Only after F1 passes may Stage 1.1 create =zeta_practice/zeta-rust.toml= and
+the project Cargo workspace.
+
+This cross-repository prerequisite must be implemented and validated in
+=zeta_forge= before =zeta_practice= consumes it.
+
+Record the forge validation commands and results before starting Stage 1.1.
+An upstream delivery does not automatically bump the zeta_practice version.
+
+* Stage overview
+
+| Stage | Deliverable |
+|-------+------------|
+| 1.1 | Application foundation |
+| 1.2 | SQLite initialization and migrations |
+| 1.3 | Accounts, login sessions, and login UI |
+| 1.4 | Typing domain engine and metric contract |
+| 1.5 | Practice content and generator |
+| 1.6 | Start-practice server boundary |
+| 1.7 | Browser-local practice UI |
+| 1.8 | Result submission and persistence |
+| 1.9 | History statistics and recent weaknesses |
+| 1.10 | Adaptive profile and next-practice generation |
+| 1.11 | Results, history, and next-practice UI |
+| 1.12 | Phase integration acceptance |
+
+* Stage 1.1 - Application foundation
+
+- Owner: =zeta_practice=.
+- Dependencies: External prerequisite F1.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver one minimal Web/server application and bilingual shell; exclude authentication, database schema, and typing behavior.
+
+** Implementation and interface constraints
+
+Create the forge-managed Rust workspace with one application member and locked dependencies. Add basic routes and zh-CN/en-US switching; keep the source boundaries described below.
+
+** Acceptance
+
+Forge rust doctor and offline locked metadata pass; Web and server startup are exercised; both UI locales render. No database persistence is claimed.
+
+* Stage 1.2 - SQLite initialization and migrations
+
+- Owner: =zeta_practice=.
+- Dependencies: Stage 1.1.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver persistence infrastructure; domain tables remain owned by the Stages that introduce their data.
+
+** Implementation and interface constraints
+
+Add an explicit database path, database initialization, and ordered schema migration execution behind the storage boundary. Introduce domain migrations incrementally in Stages 1.3, 1.8, and 1.10.
+
+** Acceptance
+
+Verify fresh initialization, migration replay, failure reporting, and restart against a temporary database; the configured persistent path is used and existing test data survives restart.
+
+* Stage 1.3 - Accounts, login sessions, and login UI
+
+- Owner: =zeta_practice=.
+- Dependencies: Stage 1.2.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver account creation, login, logout, and the current-user boundary with a minimal bilingual login interface; exclude Parent/Admin/RBAC.
+
+** Implementation and interface constraints
+
+Add users, user_settings, and revocable auth_sessions through migrations. Use password hashing and the architecture document's cookie constraints; derive the user from server-side authentication.
+
+** Acceptance
+
+Two accounts can log in independently; incorrect credentials fail, logout revokes the session, protected operations reject unauthenticated access, and account/session ownership is isolated. Account data survives restart.
+
+* Stage 1.4 - Typing domain engine and metric contract
+
+- Owner: =zeta_practice=.
+- Dependencies: Stage 1.1.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver a pure session state machine and metric calculations; exclude Dioxus state, storage, content selection, and network transport.
+
+** Implementation and interface constraints
+
+Define the domain concepts below. Fix wrong-key, cursor, Backspace/correction, and active-time semantics before implementation and encode them in focused tests. Accept elapsed monotonic time from the browser adapter.
+
+** Acceptance
+
+Deterministic event sequences verify matching, correction, completion, per-character accounting, Accuracy/WPM, and zero-attempt/zero-duration handling without starting a browser or database.
+
+* Stage 1.5 - Practice content and generator
+
+- Owner: =zeta_practice=.
+- Dependencies: Stage 1.4.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver letters, comprehensive characters, words, and short sentences; adaptive weakness weighting is added in Stage 1.10.
+
+** Implementation and interface constraints
+
+Generate bounded character content from PracticeSpec and a default TypingProfile. Load versioned en-US word/sentence resources. Keep randomness seedable and separate content locale from UI locale.
+
+** Acceptance
+
+Fixed inputs/seeds reproduce content; all four practice types work; generated characters, lengths, and resource selection stay within supported practice/difficulty constraints.
+
+* Stage 1.6 - Start-practice server boundary
+
+- Owner: =zeta_practice=.
+- Dependencies: Stages 1.3 and 1.5.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver authenticated start_practice and one bounded PracticeSpec/content response; exclude completed-result persistence.
+
+** Implementation and interface constraints
+
+Use the forge-managed typed Dioxus boundary and the generator. Validate supported practice types, difficulty, and payload bounds; initially use the default profile until Stage 1.10 connects adaptation.
+
+** Acceptance
+
+Authenticated calls return valid bounded content; unauthenticated and invalid requests fail. Contract tests work without the final typing page or submission endpoint.
+
+* Stage 1.7 - Browser-local practice UI
+
+- Owner: =zeta_practice=.
+- Dependencies: Stages 1.4 and 1.6.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver the local keyboard loop and live practice display; exclude history and persisted results.
+
+** Implementation and interface constraints
+
+Connect start_practice to a small bilingual typing page. Adapt browser keyboard events and a monotonic timer to the domain engine; show target, progress, Accuracy, WPM, and time.
+
+** Acceptance
+
+Exercise the page in a browser in both locales. A complete practice produces the expected local result, correction follows the domain tests, and network inspection confirms no per-keystroke requests.
+
+* Stage 1.8 - Result submission and persistence
+
+- Owner: =zeta_practice=.
+- Dependencies: Stages 1.2, 1.3, and 1.7.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver submit_practice_result and stored session summaries/character counts; exclude recent-window statistics and adaptation.
+
+** Implementation and interface constraints
+
+Add typing_sessions and typing_session_char_stats migrations. Submit the finished local summary through the typed boundary; validate ownership, count relationships, payload limits, practice type, and difficulty. Keep a failed final submission retryable without an offline-sync engine.
+
+** Acceptance
+
+Valid results survive restart; invalid or cross-user payloads are rejected. Test submission failure and retry handling, and verify no unbounded raw keystroke stream is sent or stored.
+
+* Stage 1.9 - History statistics and recent weaknesses
+
+- Owner: =zeta_practice=.
+- Dependencies: Stage 1.8.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver recent_typing_history and bounded recent-window calculations; exclude difficulty progression and final history UI.
+
+** Implementation and interface constraints
+
+Read only the authenticated user's summaries and character counts. Compute recent Accuracy/WPM and weak characters with a bounded window; keep calculations independently testable.
+
+** Acceptance
+
+Verify empty history, window boundaries, exclusion of old sessions, per-character counts, deterministic statistics, and isolation between two users.
+
+* Stage 1.10 - Adaptive profile and next-practice generation
+
+- Owner: =zeta_practice=.
+- Dependencies: Stages 1.5, 1.6, and 1.9.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver deterministic adaptation and profile persistence; exclude AI recommendations and curriculum models.
+
+** Implementation and interface constraints
+
+Add typing_profiles migration and typing_profile boundary. Connect result/history updates to the small profile and use it in start_practice. Centralize the threshold/window/weighting policy described below and fix the chosen defaults in tests.
+
+** Acceptance
+
+Test new-user defaults, threshold transitions, window behavior, bounded weakness weighting, repeatability, user isolation, and profile persistence. The next practice reflects recent performance.
+
+* Stage 1.11 - Results, history, and next-practice UI
+
+- Owner: =zeta_practice=.
+- Dependencies: Stages 1.7, 1.9, and 1.10.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver a bilingual result summary, history view, and concise next-practice hint; exclude games, leaderboards, and a virtual keyboard.
+
+** Implementation and interface constraints
+
+Render the existing result/history/profile boundaries. Keep UI formatting separate from metric and adaptive policy; provide the next-practice action and useful empty/error states.
+
+** Acceptance
+
+Both locales show session performance, weak characters, and the next-practice suggestion correctly. Route/component smoke tests cover history, empty states, errors, and the next-practice action.
+
+* Stage 1.12 - Phase integration acceptance
+
+- Owner: =zeta_practice=.
+- Dependencies: Stages 1.1 through 1.11 and external prerequisite F1.
+- Status: =Planned=.
+- Completion evidence: none; acceptance checks unrun.
+- Actual delivery version: unset.
+
+** Deliverable and boundary
+
+Deliver evidence that the complete Phase 1 loop works for two independent users; introduce no new product scope.
+
+** Implementation and interface constraints
+
+Run the focused verification matrix below and the real browser/server/database flow. Exercise login, practice, submission, history, adaptation, logout, and restart; record commands, configurations, results, and unresolved gaps.
+
+** Acceptance
+
+Both users complete the Phase acceptance loop, retain isolated data across restart, and receive deterministic next-practice adjustments. All required checks have evidence; missing runtime checks prevent Phase acceptance.
+
+* Shared implementation contracts
+
+These constraints apply to the Stages above; they are not extra Stages.
+The tables below describe the target model, not a requirement to create all
+tables in Stage 1.2. Introduce them with their owning capability.
+
+** Application structure
+
+Create one Rust workspace with one production application member first.
+Do not split auth, storage, and typing into separate crates until a real reuse
+or testing boundary requires it.
+
+Suggested logical source layout:
+
+#+begin_src text
+Cargo.toml
+Cargo.lock
+zeta-rust.toml
+rust/
+  rust-toolchain.toml
+app/
+  Cargo.toml
+  src/
+    main.rs
+    app.rs
+    auth/
+    storage/
+    i18n/
+    typing/
+      model.rs
+      generator.rs
+      session.rs
+      statistics.rs
+      profile.rs
+      ui.rs
+#+end_src
+
+The exact Dioxus client/server file split should follow the forge-managed
+Dioxus version and executable tooling when implementation begins.
+
+** Persistence model
+
+Implement only what the typing loop requires.
+
+Initial conceptual tables:
+
+#+begin_src text
+users
+user_settings
+auth_sessions
+typing_sessions
+typing_session_char_stats
+typing_profiles
+#+end_src
+
+=users= stores identity and password hash, never plaintext passwords.
+=auth_sessions= stores revocable server-side login sessions.
+=typing_sessions= stores one completed practice summary.
+=typing_session_char_stats= stores per-session character attempts/errors so
+recent weakness can be computed without storing every raw keystroke.
+=typing_profiles= stores the current small adaptive state.
+
+Use explicit schema migrations from the first database version.
+
+** Domain and metrics
+
+Initial practice types:
+
+1. mixed lowercase/uppercase letters;
+2. comprehensive characters with numbers/basic punctuation according to difficulty;
+3. words;
+4. short sentences.
+
+The browser receives one =PracticeSpec= and runs the complete keyboard loop
+locally.
+
+Recommended domain concepts:
+
+#+begin_src rust
+PracticeType
+PracticeSpec
+PracticeResult
+CharacterStat
+TypingProfile
+Difficulty
+#+end_src
+
+Do not expose Dioxus component state as the domain model.
+
+*** Metric contract
+
+Define the metrics before implementing UI:
+
+- =duration_ms=: monotonic active practice duration;
+- =attempt_count=: printable typing attempts considered by the session model;
+- =correct_count=: attempts correct under the chosen cursor/correction semantics;
+- =error_count=: incorrect attempts;
+- =accuracy=: =correct_count / attempt_count= when attempts are non-zero;
+- =completed_characters=: target characters successfully completed;
+- =wpm=: =(completed_characters / 5) / active_minutes=;
+- =correction_count=: correction actions tracked separately when supported.
+
+The exact wrong-key/backspace cursor behavior must be fixed in tests and remain
+stable across UI refactors.
+
+Use a browser monotonic timer for active-session timing. Wall-clock timestamps
+are for persistence/audit, not WPM measurement.
+
+** Adaptive policy
+
+Keep the first algorithm deterministic and explainable.
+
+Maintain a small profile such as:
+
+#+begin_src text
+recent_accuracy
+recent_wpm
+difficulty
+weak_characters
+last_practiced_at
+#+end_src
+
+Use a bounded recent window rather than allowing very old practice to dominate
+the weakness calculation.
+
+Initial adaptive policy may use centralized defaults such as:
+
+#+begin_src text
+accuracy >= 95% for a stable recent window -> consider increasing difficulty
+accuracy < 85%                         -> reduce complexity or reinforce weakness
+otherwise                              -> retain difficulty
+#+end_src
+
+For generated character practice, bias a bounded share of content toward weak
+characters; for example, a default 70/30 normal-to-weak weighting. These are
+configuration/policy constants, not UI magic numbers.
+
+WPM is a secondary progression signal. Early improvement should not reward
+speed at the cost of persistently poor accuracy.
+
+** Content ownership
+
+Keep content ownership simple:
+
+#+begin_src text
+assets/
+  typing/
+    en-US/
+      words.*
+      sentences.*
+#+end_src
+
+Generated character practice is produced from =PracticeSpec + TypingProfile=.
+Word/sentence practice selects from versioned repository content and may prefer
+items containing current weak characters.
+
+Do not introduce a curriculum database in Phase 1.
+
+** UI boundaries
+
+Keep the typing page intentionally small:
+
+#+begin_src text
++--------------------------------------+
+| Practice type / progress             |
++--------------------------------------+
+|                                      |
+|              Target text             |
+|              User input              |
+|                                      |
++--------------------------------------+
+| Accuracy       WPM        Time        |
++--------------------------------------+
+| Progress / concise adaptive hint     |
++--------------------------------------+
+#+end_src
+
+No virtual keyboard, finger animation, key-position lessons, or game UI is
+required.
+
+The summary view should answer:
+
+- how did this session perform?
+- which characters were weak?
+- what should be practiced next?
+
+** Server API boundary
+
+Use typed Dioxus server/client boundaries from the forge-managed framework
+version. Avoid inventing a second REST API unless a demonstrated non-Dioxus
+client requires it.
+
+The minimum operations are conceptually:
+
+#+begin_src text
+login / logout / current_user
+start_practice
+submit_practice_result
+recent_typing_history
+typing_profile
+#+end_src
+
+=start_practice= returns a bounded practice specification/content payload.
+=submit_practice_result= accepts a completed summary and per-character counts,
+not a network call per keystroke and not an unbounded raw event stream.
+
+Server input must validate ownership, count relationships, payload limits, and
+supported practice/difficulty values before persistence.
+
+* Verification
+
+Focused automated coverage should include:
+
+- generator determinism with fixed seeds where randomness is used;
+- target matching and correction semantics;
+- zero-duration/zero-attempt safety;
+- Accuracy and WPM calculations;
+- per-character error accounting;
+- adaptive threshold transitions;
+- weak-character weighting bounds;
+- authentication isolation;
+- SQLite migration and restart persistence;
+- server payload validation;
+- bilingual route/component smoke tests.
+
+Use =zeta_forge= Rust entrypoints for doctor, metadata, check, build, and test.
+Do not claim Web runtime validation until the application has actually been run
+in a browser.
+
+* Phase acceptance
+
+=Phase 1= is complete when two independent users can use the Web application,
+complete typing practices without keystroke network round trips, persist their
+own history, see Accuracy/WPM/error statistics, and receive a deterministic
+next-practice adjustment based on recent performance.
+
+A second practice module is not part of this Phase.
+
+Stage 1.12 records integration evidence. All preceding Stages and the full loop
+must pass their required checks before Phase acceptance. If the final Stage
+and Phase are versioned together, record both in one delivery.
+
+* Previous plan identifier mapping
+
+The former =typing_v0.2_plan.org= is replaced by this Phase document. Old
+identifiers below are historical references, not active executable Stages.
+
+| Previous identifier | Replacement |
+|---------------------+-------------|
+| Stage 0 | External prerequisite F1 (zeta_forge) |
+| Stage 1 | Stages 1.1, 1.2 |
+| Stage 2 | Stages 1.2, 1.3, 1.8, 1.10 |
+| Stage 3 | Stages 1.4, 1.5, 1.7 |
+| Stage 4 | Stages 1.9, 1.10 |
+| Stage 5 | Stage 1.5 |
+| Stage 6 | Stages 1.3, 1.7, 1.11 |
+| Server API boundary | Stages 1.3, 1.6, 1.8, 1.9, 1.10 |
+| Verification / Definition of Done | Each Stage's checks and Stage 1.12 |
+
+This migration preserves the original technical and product scope. It does not
+implement application features or rewrite the v0.1.0 release history.

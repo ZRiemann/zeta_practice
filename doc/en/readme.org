@@ -25,12 +25,18 @@ not force premature abstractions into the first implementation.
 - Small-system bias: prefer a simple monolith and explicit modules over microservices or speculative frameworks.
 - Data minimization: collect only data needed for authentication, practice history, statistics, and improvement.
 
-* Version Roadmap
+* Current Version
 
-** v0.1.0
-Project definition, architecture, dependency governance, and v0.2.0 plan.
+=v0.1.0= establishes the project definition, architecture, dependency governance,
+and initial planning baseline. It contains no production Rust/Dioxus application.
+See [[file:../../release_history.org][Release History]] for actual versioned changes.
 
-** v0.2.0
-First functional Web application and typing practice MVP.
+* Phase Roadmap
 
-The typing MVP is defined in [[file:./typing_v0.2_plan.org][typing_v0.2_plan.org]].
+=Phase 1 - Typing= delivers the first complete Web typing practice loop through
+Stages 1.1-1.12, with a separate =zeta_forge= prerequisite. All application Stages
+remain planned, with no acceptance evidence or delivery versions assigned.
+Phase identity and release versions are independent.
+
+See [[file:./phase1_typing.org][Phase 1 - Typing]] for goals, boundaries, Stage
+dependencies, acceptance criteria, and the mapping from the previous plan.

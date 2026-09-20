@@ -1,0 +1,569 @@
+#+STARTUP: indent
+#+TITLE: zeta_practice Phase 1 - Typing 实施计划
+
+[[file:../en/phase1_typing.org][English Version]] | [[file:./readme.org][返回中文文档]]
+
+* Phase 记录
+
+- 标识：=Phase 1=；所属仓库：=zeta_practice=。
+- 状态：=Planned=；尚未实施或验收任何应用 Stage。
+- 完成证据：无；所有 Stage 验收检查均未运行。
+- 实际交付版本：未设置。当前项目 =VERSION= 为 =v0.1.0=，表示文档基线，
+  不表示 typing 应用已交付。
+
+Phase 标识独立于发布版本。下列各 Stage 是包含实现、验证、文档和交接的内聚 Agent
+任务。依赖显式记录，编号本身不要求串行执行。任务过大时拆成同级 Stage 并记录替代
+关系，不得静默重编号已经被引用的标识。
+
+通用规划与交付版本规则由 =zsa/agents/zetax/skills/= 下的 =zetax-planning= skill
+维护。在实际交付时记录验收证据和版本，不提前分配 Minor 版本。必要检查未运行时不能
+通过验收；已验收但未更新版本的工作记录为等待版本化交付。
+
+* 目标
+
+=Phase 1= 交付第一个完整可用闭环：
+
+#+begin_src text
+打开 Web 应用
+  -> 登录
+  -> 开始 typing practice
+  -> 浏览器本地完成输入
+  -> 结束并提交结果
+  -> 持久化结果
+  -> 更新统计/profile
+  -> 根据当前能力生成下一次练习
+#+end_src
+
+typing 是能力练习系统，不承担基础键盘教学。键位、指法、姿势等基础知识由用户人工教学
+或其他材料完成。
+
+* 明确不做
+
+Phase 1 不包含：
+
+- 键位和指法教学；
+- curriculum tree、mastery graph、lesson unlock；
+- 游戏经济、排行榜、社交和复杂成就；
+- AI tutor 或模型推荐；
+- offline sync；
+- PostgreSQL、Redis、消息队列和微服务；
+- 复杂 Parent/RBAC 管理流程。
+
+* 外部前置依赖 F1 - Zeta Forge
+
+- 所属仓库：=zeta_forge=。状态：=Planned=。验收证据：无。
+- 上游实际交付版本：未设置。
+
+在本仓库加入正式 Cargo manifest 之前：
+
+1. 在 =zeta_forge/rust/baseline.toml= 增加经过审查的 Dioxus Web/Fullstack 依赖组。
+2. 保持 forge 当前受管 Dioxus 版本策略；如果要升级，必须先在 =zeta_forge= 完成。
+3. server、SQLite、密码哈希、序列化、时间和 migration 等公共 crate 如需使用，先纳入 forge 治理。
+4. 验证 zeta_forge Rust 基线和自身测试。
+
+F1 通过后，Stage 1.1 才能在 =zeta_practice= 创建 =zeta-rust.toml= 和项目 Cargo workspace。
+
+这是跨仓库前置任务；=zeta_practice= 不能通过自己 pin 一套公共 crate 版本来绕过它。
+
+启动 Stage 1.1 前记录 forge 验证命令和结果。上游交付不会自动触发 zeta_practice 升版。
+
+* Stage 总览
+
+| Stage | 交付内容 |
+|-------+------------|
+| 1.1 | 应用基础 |
+| 1.2 | SQLite 初始化与迁移 |
+| 1.3 | 账户、登录会话与登录界面 |
+| 1.4 | Typing 领域引擎与指标契约 |
+| 1.5 | 练习内容与生成器 |
+| 1.6 | 开始练习的服务端边界 |
+| 1.7 | 浏览器本地练习界面 |
+| 1.8 | 结果提交与持久化 |
+| 1.9 | 历史统计与近期弱项 |
+| 1.10 | 自适应 Profile 与下一次内容生成 |
+| 1.11 | 结果、历史与下一次练习界面 |
+| 1.12 | Phase 集成验收 |
+
+* Stage 1.1 - 应用基础
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：外部前置依赖 F1。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付最小 Web/服务端应用和双语外壳；不包含认证、数据库 schema 和 typing 行为。
+
+** 实施内容与接口约束
+
+建立 forge 受管 Rust workspace、单个 application member 和锁定依赖。增加基本路由及 zh-CN/en-US 切换，保留下文约定的源码边界。
+
+** 验收
+
+forge rust doctor 与离线 locked metadata 通过；实际验证 Web 和服务端启动、两种 UI 语言显示。本阶段不宣称数据库持久化已完成。
+
+* Stage 1.2 - SQLite 初始化与迁移
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.1。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付持久化基础设施；各领域表归引入相应数据的 Stage 所有。
+
+** 实施内容与接口约束
+
+在 storage 边界内增加显式数据库路径、数据库初始化和有序 schema migration 执行机制。领域 migration 分别在 Stage 1.3、1.8、1.10 引入。
+
+** 验收
+
+使用临时数据库验证首次初始化、重复执行 migration、失败报告和重启；实际使用配置的持久化路径，已有测试数据在重启后保留。
+
+* Stage 1.3 - 账户、登录会话与登录界面
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.2。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付账户创建、登录、注销、current-user 边界及最小双语登录界面；不包含 Parent/Admin/RBAC。
+
+** 实施内容与接口约束
+
+通过 migration 增加 users、user_settings 和可撤销的 auth_sessions。使用密码哈希并遵循架构文档中的 cookie 约束；用户身份来自服务端认证。
+
+** 验收
+
+两个账户能够独立登录；错误凭据被拒绝，注销撤销会话，受保护操作拒绝未登录请求，账户和会话归属隔离。账户数据在重启后保留。
+
+* Stage 1.4 - Typing 领域引擎与指标契约
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.1。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付纯 session 状态机和指标计算；不包含 Dioxus state、存储、内容选择及网络传输。
+
+** 实施内容与接口约束
+
+定义下文领域概念。实施前明确错误按键、cursor、Backspace/correction 和有效计时语义，并写入针对性测试。由浏览器适配层传入单调时钟耗时。
+
+** 验收
+
+通过确定性的事件序列验证匹配、纠错、完成、字符计数、Accuracy/WPM 以及 zero-attempt/zero-duration 行为，无需启动浏览器或数据库。
+
+* Stage 1.5 - 练习内容与生成器
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.4。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付字母、综合字符、单词和短句四类内容；自适应弱项加权在 Stage 1.10 增加。
+
+** 实施内容与接口约束
+
+根据 PracticeSpec 和默认 TypingProfile 生成有界字符内容，加载版本化 en-US 单词/短句资源。随机过程支持固定 seed，练习内容语言与 UI 语言分离。
+
+** 验收
+
+固定输入/seed 可以复现内容；四类练习均可用；生成字符、长度及资源选择符合受支持的 practice/difficulty 约束。
+
+* Stage 1.6 - 开始练习的服务端边界
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.3、1.5。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付需要认证的 start_practice 和一次有界 PracticeSpec/内容响应；不包含完成结果的持久化。
+
+** 实施内容与接口约束
+
+使用 forge 受管 Dioxus typed 边界和生成器，校验练习类型、difficulty 及 payload 边界。在 Stage 1.10 接入自适应之前先使用默认 profile。
+
+** 验收
+
+已认证调用返回合法有界内容；拒绝未认证和非法请求。契约测试不依赖最终 typing 页面或结果提交接口。
+
+* Stage 1.7 - 浏览器本地练习界面
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.4、1.6。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付本地键盘循环和实时练习显示；不包含历史及结果持久化。
+
+** 实施内容与接口约束
+
+将 start_practice 接入精简双语 typing 页面。把浏览器键盘事件和单调时钟适配到领域引擎，显示目标、进度、Accuracy、WPM 和时间。
+
+** 验收
+
+在真实浏览器中验证两种 UI 语言。完整练习产生预期本地结果，纠错行为符合领域测试；检查网络请求，确认不存在逐键联网。
+
+* Stage 1.8 - 结果提交与持久化
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.2、1.3、1.7。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付 submit_practice_result 和 session 摘要/字符计数存储；不包含近期窗口统计及自适应。
+
+** 实施内容与接口约束
+
+增加 typing_sessions 和 typing_session_char_stats migration。通过 typed 边界提交本地完成摘要，校验用户归属、计数关系、payload 上限、练习类型及 difficulty。最终提交失败后可重试，不引入 offline-sync 引擎。
+
+** 验收
+
+合法结果在重启后保留；拒绝非法和跨用户 payload。测试提交失败及重试处理，确认不会发送或保存无限增长的原始按键事件流。
+
+* Stage 1.9 - 历史统计与近期弱项
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.8。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付 recent_typing_history 和有界近期窗口计算；不包含难度推进及最终历史界面。
+
+** 实施内容与接口约束
+
+仅读取已认证用户的摘要及字符计数。在有限窗口中计算近期 Accuracy/WPM 和 weak characters，并保持计算可独立测试。
+
+** 验收
+
+验证空历史、窗口边界、排除旧 session、字符计数、确定性统计及双用户隔离。
+
+* Stage 1.10 - 自适应 Profile 与下一次内容生成
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.5、1.6、1.9。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付确定性自适应和 profile 持久化；不包含 AI 推荐及 curriculum 模型。
+
+** 实施内容与接口约束
+
+增加 typing_profiles migration 和 typing_profile 边界。将结果/历史更新接入小型 profile，并供 start_practice 使用。集中管理下文阈值、窗口、权重策略，在测试中固定选定默认值。
+
+** 验收
+
+测试新用户默认值、阈值转换、窗口行为、有界弱项权重、可复现性、用户隔离及 profile 持久化；下一次练习能够反映近期表现。
+
+* Stage 1.11 - 结果、历史与下一次练习界面
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.7、1.9、1.10。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付双语结果摘要、历史视图和简洁的下一次练习提示；不包含游戏、排行榜及虚拟键盘。
+
+** 实施内容与接口约束
+
+展示已有 result/history/profile 边界数据，UI 格式化与指标、自适应策略分离。提供下一次练习操作，以及有用的空状态和错误状态。
+
+** 验收
+
+两种语言均正确显示本次表现、弱字符及下一次练习建议。路由/组件 smoke test 覆盖历史、空状态、错误和下一次练习操作。
+
+* Stage 1.12 - Phase 集成验收
+
+- 所属仓库：=zeta_practice=。
+- 前置依赖：Stage 1.1 至 1.11，以及外部前置依赖 F1。
+- 状态：=Planned=。
+- 完成证据：无；验收检查未运行。
+- 实际交付版本：未设置。
+
+** 交付目标与边界
+
+交付两个独立用户完成 Phase 1 全闭环的证据；不引入新的产品范围。
+
+** 实施内容与接口约束
+
+执行下文针对性验证矩阵和真实浏览器/服务端/数据库流程。覆盖登录、练习、提交、历史、自适应、注销及重启，记录命令、配置、结果和未解决缺项。
+
+** 验收
+
+两个用户均完成 Phase 验收闭环，重启后仍保有各自隔离数据，并获得确定性下一次练习调整。所有必要检查均有证据；缺少 runtime 验证时不能通过 Phase 验收。
+
+* 共享实施契约
+
+这些约束适用于上述 Stage，不是额外的 Stage。下列表结构描述目标模型，不要求在
+Stage 1.2 一次建立全部领域表；各表随所属能力引入。
+
+** 应用结构
+
+首版只建立一个 Rust workspace 和一个正式 application member。
+auth、storage、typing 暂时保持为应用内部 module，不为了形式提前拆多个 crate。
+
+建议逻辑布局：
+
+#+begin_src text
+Cargo.toml
+Cargo.lock
+zeta-rust.toml
+rust/
+  rust-toolchain.toml
+app/
+  Cargo.toml
+  src/
+    main.rs
+    app.rs
+    auth/
+    storage/
+    i18n/
+    typing/
+      model.rs
+      generator.rs
+      session.rs
+      statistics.rs
+      profile.rs
+      ui.rs
+#+end_src
+
+真正实施时，Dioxus client/server 文件布局以 forge 受管版本和可执行工具为准。
+
+** 持久化模型
+
+只实现 typing 闭环真正需要的数据。
+
+初始概念表：
+
+#+begin_src text
+users
+user_settings
+auth_sessions
+typing_sessions
+typing_session_char_stats
+typing_profiles
+#+end_src
+
+=users= 保存身份和 password hash，绝不保存明文密码。
+=auth_sessions= 保存可撤销的服务端登录 session。
+=typing_sessions= 保存一次完整练习摘要。
+=typing_session_char_stats= 保存本次每个字符的 attempts/errors，不保存每个原始按键事件，
+同时可以计算近期弱项。
+=typing_profiles= 保存当前小型 adaptive 状态。
+
+从第一版数据库开始使用显式 schema migration。
+
+** 领域与指标
+
+初始练习类型：
+
+1. 大小写字母综合练习；
+2. 根据难度加入数字和基础标点的综合字符练习；
+3. 单词；
+4. 短句。
+
+浏览器一次获取 =PracticeSpec=，完整 keyboard loop 都在本地执行。
+
+建议领域概念：
+
+#+begin_src rust
+PracticeType
+PracticeSpec
+PracticeResult
+CharacterStat
+TypingProfile
+Difficulty
+#+end_src
+
+Dioxus component state 不能直接充当领域模型。
+
+*** 指标契约
+
+先固定指标，再实现 UI：
+
+- =duration_ms=：单调时钟测量的有效练习时长；
+- =attempt_count=：session 语义下计入统计的可打印字符输入次数；
+- =correct_count=：按固定 cursor/correction 规则判定正确的次数；
+- =error_count=：错误次数；
+- =accuracy=：attempt 非零时 =correct_count / attempt_count=；
+- =completed_characters=：成功完成的目标字符数量；
+- =wpm=：=(completed_characters / 5) / active_minutes=；
+- =correction_count=：如支持修正行为，单独统计。
+
+错误按键和 Backspace 对 cursor 的具体影响必须由测试固定，UI 重构不能改变统计语义。
+
+练习耗时使用浏览器 monotonic timer。墙上时间只用于持久化时间戳，不用于 WPM。
+
+** 自适应策略
+
+第一版算法保持 deterministic、可解释。
+
+Profile 保持小型：
+
+#+begin_src text
+recent_accuracy
+recent_wpm
+difficulty
+weak_characters
+last_practiced_at
+#+end_src
+
+弱项统计使用有限近期窗口，不能让很久以前的数据永久主导当前能力判断。
+
+初始策略可以使用集中定义的默认值：
+
+#+begin_src text
+近期稳定 accuracy >= 95% -> 可以提高 difficulty
+accuracy < 85%           -> 降低复杂度或增加弱项强化
+其他                     -> 保持 difficulty
+#+end_src
+
+动态字符练习对弱字符增加有限权重，例如默认普通字符/弱字符约 70/30。
+这些值属于集中策略配置，不允许作为 UI magic number 散落。
+
+WPM 是次级进阶信号。不能为了提高速度奖励持续较差的准确率。
+
+** 内容归属
+
+内容保持简单：
+
+#+begin_src text
+assets/
+  typing/
+    en-US/
+      words.*
+      sentences.*
+#+end_src
+
+字符综合练习由 =PracticeSpec + TypingProfile= 动态生成。
+单词/短句来自仓库版本化资源，也可以优先选择包含当前弱字符的内容。
+
+Phase 1 不建立 curriculum 数据库。
+
+** UI 边界
+
+Typing 主页面保持精简：
+
+#+begin_src text
++--------------------------------------+
+| Practice type / progress             |
++--------------------------------------+
+|                                      |
+|              Target text             |
+|              User input              |
+|                                      |
++--------------------------------------+
+| Accuracy       WPM        Time        |
++--------------------------------------+
+| Progress / concise adaptive hint     |
++--------------------------------------+
+#+end_src
+
+不需要虚拟键盘、手指动画、键位课程或复杂游戏 UI。
+
+结束页面回答三个问题：
+
+- 本次表现如何？
+- 哪些字符较弱？
+- 下一步练什么？
+
+** Server API 边界
+
+使用 forge 受管 Dioxus 版本提供的 typed client/server 边界。
+在没有明确非 Dioxus client 需求之前，不额外发明第二套 REST API。
+
+最小操作概念上包括：
+
+#+begin_src text
+login / logout / current_user
+start_practice
+submit_practice_result
+recent_typing_history
+typing_profile
+#+end_src
+
+=start_practice= 一次性返回有界的练习规格/内容。
+=submit_practice_result= 提交完成摘要和字符级计数，不逐键联网，也不上传无限增长的原始事件流。
+
+服务端必须校验用户归属、计数关系、payload 上限以及 practice/difficulty 合法值。
+
+* 验证
+
+重点自动测试：
+
+- 使用固定 seed 时 generator 可确定复现；
+- target matching 和 correction 语义；
+- zero-duration / zero-attempt 安全；
+- Accuracy / WPM 计算；
+- 字符错误统计；
+- adaptive 阈值转换；
+- 弱字符加权边界；
+- 多用户认证隔离；
+- SQLite migration 和重启持久化；
+- server payload 校验；
+- 中英文 route/component smoke test。
+
+Rust doctor、metadata、check、build、test 统一使用 =zeta_forge= 入口。
+没有真实浏览器运行验证时，不能宣称 Web runtime 已验证。
+
+* Phase 验收
+
+=Phase 1= 完成时，至少两个独立用户能够通过 Web 应用登录，在无逐键网络请求的情况下完成
+typing 练习，分别持久化自己的历史，查看 Accuracy/WPM/error 统计，并根据近期表现得到
+确定性的下一次练习调整。
+
+第二个练习模块不属于本 Phase。
+
+Stage 1.12 记录集成证据。所有前置 Stage 及完整闭环必须通过必要检查后才能验收
+Phase。最后一个 Stage 与 Phase 同时版本化交付时，在同一次交付中记录两者。
+
+* 原规划标识映射
+
+原 =typing_v0.2_plan.org= 由本 Phase 文档替代。下列旧标识只供历史引用，不再作为
+当前可执行 Stage。
+
+| 原标识 | 替代项 |
+|--------+--------|
+| Stage 0 | 外部前置依赖 F1（zeta_forge） |
+| Stage 1 | Stage 1.1、1.2 |
+| Stage 2 | Stage 1.2、1.3、1.8、1.10 |
+| Stage 3 | Stage 1.4、1.5、1.7 |
+| Stage 4 | Stage 1.9、1.10 |
+| Stage 5 | Stage 1.5 |
+| Stage 6 | Stage 1.3、1.7、1.11 |
+| Server API 边界 | Stage 1.3、1.6、1.8、1.9、1.10 |
+| 验证 / 完成定义 | 各 Stage 检查及 Stage 1.12 |
+
+本次迁移保留原有技术与产品范围，不实施应用功能，不改写 v0.1.0 发布历史。

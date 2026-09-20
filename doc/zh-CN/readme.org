@@ -23,12 +23,16 @@
 - 保持简单：优先单体服务和清晰模块，不引入微服务或预测性框架。
 - 数据最小化：只保存认证、练习历史、统计和能力提升真正需要的数据。
 
-* 版本路线
+* 当前版本
 
-** v0.1.0
-项目定义、架构、依赖治理和 v0.2.0 实施规划。
+=v0.1.0= 建立项目定义、架构、依赖治理和初始规划基线，尚无正式 Rust/Dioxus 应用。
+实际版本化变更见 [[file:./release_history.org][发布历史]]。
 
-** v0.2.0
-首个可运行 Web 应用和 typing 练习 MVP。
+* Phase 路线
 
-详细计划见 [[file:./typing_v0.2_plan.org][typing_v0.2_plan.org]]。
+=Phase 1 - Typing= 通过 Stage 1.1-1.12 交付首个完整 Web typing 练习闭环，并单独记录
+=zeta_forge= 前置依赖。所有应用 Stage 均待实施，尚无验收证据，也未分配交付版本。
+Phase 标识与发布版本相互独立。
+
+目标、边界、Stage 依赖、验收条件及旧规划映射见
+[[file:./phase1_typing.org][Phase 1 - Typing 实施计划]]。

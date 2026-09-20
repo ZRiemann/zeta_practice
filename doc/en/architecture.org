@@ -55,7 +55,7 @@ server -> persist history -> update statistics/profile
 
 Short network outages therefore do not change keystroke latency. A failed final
 submission should remain retryable without implementing a full offline-sync
-engine in v0.2.0.
+engine in Phase 1.
 
 ** Server owns authoritative account and persistent state
 
@@ -90,7 +90,7 @@ The =typing= module owns:
 - typing-specific UI.
 
 Do not create a generic =practice_core::skill/mastery/curriculum= framework in
-v0.2.0. Extract shared capability only after a second real module demonstrates
+Phase 1. Extract shared capability only after a second real module demonstrates
 the same ownership and behavior.
 
 * Authentication and User Model
@@ -103,7 +103,7 @@ Browser authentication should use secure cookies with appropriate =HttpOnly=,
 =Secure=, and =SameSite= settings when deployed over HTTPS.
 
 Role handling should remain minimal. A future parent/admin role may manage
-student accounts and inspect statistics, but v0.2.0 must not introduce a large
+student accounts and inspect statistics, but Phase 1 must not introduce a large
 RBAC framework.
 
 * Internationalization
@@ -154,7 +154,7 @@ that gap by pinning a competing direct dependency baseline in =zeta_practice=.
 
 As of the v0.1.0 planning baseline, forge provides Dioxus 0.7.10 through a
 =dioxus-desktop= group but does not yet provide the required Web/Fullstack
-group. That is a prerequisite for v0.2.0 implementation.
+group. That is a prerequisite for Phase 1 implementation.
 
 * Evolution Rules
 

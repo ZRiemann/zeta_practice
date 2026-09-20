@@ -12,8 +12,16 @@ The first planned practice module is =typing=.
 * Current Status
 
 Version =v0.1.0= establishes the project definition, architecture boundaries,
-dependency policy, and the implementation plan for the =v0.2.0= typing MVP.
+dependency policy, and the initial implementation plan. The current roadmap
+organizes the typing MVP as =Phase 1=, independently of release versions.
 It intentionally contains no production Rust/Dioxus application code yet.
+
+* Phase Roadmap
+
+=Phase 1 - Typing= defines the first complete typing practice loop in 12 Stages.
+All application Stages remain planned. The external =zeta_forge= dependency
+prerequisite must be validated before application implementation. Actual delivery
+versions will be recorded after acceptance; no completion version is assigned.
 
 * Product Direction
 
@@ -39,8 +47,8 @@ third-party Rust dependency baseline.
 * Documentation
 
 - [[file:./doc/en/architecture.org][Architecture]]
-- [[file:./doc/en/typing_v0.2_plan.org][v0.2.0 Typing Implementation Plan]]
+- [[file:./doc/en/phase1_typing.org][Phase 1 Typing Implementation Plan]]
 - [[file:./release_history.org][Release History]]
 - [[file:./doc/zh-CN/readme.org][中文项目说明]]
 - [[file:./doc/zh-CN/architecture.org][中文架构说明]]
-- [[file:./doc/zh-CN/typing_v0.2_plan.org][v0.2.0 Typing 实施计划]]
+- [[file:./doc/zh-CN/phase1_typing.org][Phase 1 Typing 实施计划]]

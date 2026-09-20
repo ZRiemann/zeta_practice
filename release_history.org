@@ -5,6 +5,20 @@
 
 * Release History
 
+** v0.1.1 - 2026-09-20
+*** Release Summary
+- Reframe the typing roadmap as Phase 1 with acceptance-driven Stages independent of release-version numbering.
+
+*** Changes
+- Replaced the version-bound typing plan with a bilingual Phase 1 plan covering 12 cohesive implementation and acceptance Stages.
+- Recorded Stage ownership, dependencies, non-goals, acceptance evidence requirements, and actual delivery-version fields without preallocating future versions.
+- Kept the =zeta_forge= Web/Fullstack dependency baseline as an explicit external prerequisite and added mappings from the superseded plan identifiers.
+- Updated the architecture and bilingual documentation indexes to use Phase terminology and the new plan paths.
+- Ignored local =.vorg.db= editor database files.
+
+*** Compatibility and Upgrade Notes
+- This release changes planning documentation only; it does not add a production application, database schema, public API, or deployment artifact.
+
 ** v0.1.0 - 2026-09-20
 *** Release Summary
 - Establish the initial project definition and architecture baseline for a Web-first, multi-user skill practice platform.
