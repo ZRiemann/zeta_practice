@@ -6,11 +6,11 @@
 * Phase record
 
 - Identifier: =Phase 1=; owner: =zeta_practice=.
-- Status: =In progress=; Stage 1.1 is delivered and Stages 1.2-1.12 remain planned.
-- Completion evidence: Stage 1.1 evidence is recorded below; Phase integration
+- Status: =In progress=; Stages 1.1-1.2 are delivered and Stages 1.3-1.12 remain planned.
+- Completion evidence: Stage 1.1-1.2 evidence is recorded below; Phase integration
   acceptance remains unrun.
 - Actual delivery version: unset; Phase 1 is not complete. Current project
-  =VERSION= is =v0.2.0= for the Stage 1.1 delivery.
+  =VERSION= is =v0.3.0= for the Stage 1.2 delivery.
 
 Phase identity is independent of release versions. Each Stage below is one
 cohesive agent task including implementation, verification, documentation, and
@@ -125,9 +125,15 @@ Forge rust doctor and offline locked metadata pass; Web and server startup are e
 
 - Owner: =zeta_practice=.
 - Dependencies: Stage 1.1.
-- Status: =Planned=.
-- Completion evidence: none; acceptance checks unrun.
-- Actual delivery version: unset.
+- Status: =Delivered=.
+- Completion evidence: =cargo +1.97.1 test -p zeta-practice --no-default-features
+  --features server --locked= passed 6 tests, including configured-path
+  validation, fresh file initialization,
+  migration replay, failure rollback/reporting, history mismatch rejection,
+  and persisted test data after restart. Locked Web-target =cargo check= passed;
+  Forge =python3 -m unittest tests.test_rust_workspace= passed 12 tests, and
+  Forge project validation accepted baseline =1.97.1-r3= with the SQLite group.
+- Actual delivery version: =v0.3.0=.
 
 ** Deliverable and boundary
 

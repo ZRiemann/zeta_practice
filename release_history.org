@@ -5,6 +5,19 @@
 
 * Release History
 
+** v0.3.0 - 2026-09-24
+*** Release Summary
+- Deliver Phase 1 Stage 1.2 with server-side SQLite initialization and ordered migrations.
+
+*** Changes
+- Require an explicit persistent =ZETA_PRACTICE_DB_PATH= and initialize SQLite before the server starts.
+- Apply numbered migrations transactionally, record migration history, and reject incompatible history or failed SQL.
+- Add storage metadata as the first infrastructure migration and verify replay, rollback, and restart persistence.
+- Adopt the Forge =1.97.1-r3= baseline with governed =rusqlite 0.40.2=.
+
+*** Compatibility and Upgrade Notes
+- Server startup now requires an absolute database file path whose parent directory exists. Domain tables remain for later Stages.
+
 ** v0.2.1 - 2026-09-24
 *** Release Summary
 - Add a unified Forge-backed build entry for the Web/fullstack application.

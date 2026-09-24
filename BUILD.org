@@ -27,3 +27,16 @@ checks host server and wasm web features (including Clippy) after rustfmt.
 Built release server: =target/dx/zeta-practice/release/web/server=, assets beside it
 in =public/=. =run= preserves resource lookup and defaults to local =127.0.0.1:8080=;
 =IP= and =PORT= can override it. Missing output fails without recompilation.
+
+* SQLite runtime path
+
+The server requires =ZETA_PRACTICE_DB_PATH= to be an absolute path to a database
+file on persistent storage. Create its parent directory before starting the
+server; startup opens the file and applies pending schema migrations. Startup
+fails with a migration error rather than serving with an unsupported schema.
+The Web client does not open SQLite. Back up the database file before upgrading
+to a release with new migrations; schema migrations are forward-only.
+
+#+begin_src sh
+ZETA_PRACTICE_DB_PATH=/srv/zeta-practice/practice.sqlite ./zbuild.py run
+#+end_src

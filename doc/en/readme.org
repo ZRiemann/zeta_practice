@@ -27,16 +27,16 @@ not force premature abstractions into the first implementation.
 
 * Current Version
 
-=v0.2.0= delivers the forge-managed Rust/Dioxus Web/Fullstack application
-foundation, basic routes, and zh-CN/en-US UI switching for Stage 1.1.
+=v0.3.0= delivers SQLite initialization and ordered migrations for Stage 1.2,
+following the Stage 1.1 application foundation in =v0.2.0=.
 See [[file:../../release_history.org][Release History]] for actual versioned changes.
 
 * Phase Roadmap
 
 =Phase 1 - Typing= delivers the first complete Web typing practice loop through
 Stages 1.1-1.12, with a separate =zeta_forge= prerequisite. Stage 1.1 is delivered
-in =v0.2.0=; Stages 1.2-1.12 remain planned. Phase identity and release versions
-are independent.
+in =v0.2.0= and Stage 1.2 in =v0.3.0=; Stages 1.3-1.12 remain planned.
+Phase identity and release versions are independent.
 
 See [[file:./phase1_typing.org][Phase 1 - Typing]] for goals, boundaries, Stage
 dependencies, acceptance criteria, and the mapping from the previous plan.

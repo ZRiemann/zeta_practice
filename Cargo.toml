@@ -3,13 +3,14 @@ members = ["app"]
 resolver = "2"
 
 [workspace.metadata.zeta-forge]
-baseline = "1.97.1-r1"
+baseline = "1.97.1-r3"
 
 [workspace.package]
-version = "0.2.1"
+version = "0.3.0"
 edition = "2024"
 rust-version = "1.97"
 license = "Apache-2.0"
 
 [workspace.dependencies]
 dioxus = { version = "=0.7.10", default-features = false, features = ["lib", "launch", "logger"] }
+rusqlite = { version = "=0.40.2", features = ["bundled"] }

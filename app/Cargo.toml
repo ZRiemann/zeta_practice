@@ -8,8 +8,9 @@ publish = false
 
 [dependencies]
 dioxus = { workspace = true, features = ["fullstack", "router"] }
+rusqlite = { workspace = true, optional = true }
 
 [features]
 default = ["web"]
 web = ["dioxus/web"]
-server = ["dioxus/server"]
+server = ["dioxus/server", "dep:rusqlite"]
