@@ -52,3 +52,7 @@ third-party Rust dependency baseline.
 - [[file:./doc/zh-CN/readme.org][中文项目说明]]
 - [[file:./doc/zh-CN/architecture.org][中文架构说明]]
 - [[file:./doc/zh-CN/phase1_typing.org][Phase 1 Typing 实施计划]]
+
+* Current build contract
+
+See [[file:BUILD.org][Unified build entry, defaults and verification scope]].

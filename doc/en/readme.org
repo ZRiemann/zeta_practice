@@ -40,3 +40,7 @@ are independent.
 
 See [[file:./phase1_typing.org][Phase 1 - Typing]] for goals, boundaries, Stage
 dependencies, acceptance criteria, and the mapping from the previous plan.
+
+* Current build contract
+
+See [[file:../../BUILD.org][Unified build entry, defaults and verification scope]].

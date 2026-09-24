@@ -5,6 +5,18 @@
 
 * 发布历史
 
+** v0.2.1 - 2026-09-24
+*** 发布定位摘要
+- 为 Web/Fullstack 应用增加统一的 Forge 构建入口。
+
+*** 变更
+- 增加根目录 =zbuild.py= 启动器及项目自有的 Rust 构建定义。
+- 在 =BUILD.org= 记录 build、check、test、run、dev、profile 和产物约定，并从项目 README 链接。
+- 采用不可变的 Forge Rust baseline =1.97.1-r1=。
+
+*** 兼容与升级说明
+- 应用行为保持不变；构建命令现在通过根目录统一入口执行。
+
 ** v0.2.0 - 2026-09-20
 *** 发布定位摘要
 - 交付 Phase 1 Stage 1.1，建立首个可运行的 Rust/Dioxus Web/Fullstack 应用基础。

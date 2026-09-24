@@ -21,3 +21,6 @@ target
 #.idea/
 
 **/.vorg.db
+# Python build-entry caches
+__pycache__/
+*.py[cod]

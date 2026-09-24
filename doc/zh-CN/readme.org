@@ -37,3 +37,7 @@ Phase 标识与发布版本相互独立。
 
 目标、边界、Stage 依赖、验收条件及旧规划映射见
 [[file:./phase1_typing.org][Phase 1 - Typing 实施计划]]。
+
+* Current build contract
+
+See [[file:../../BUILD.org][Unified build entry, defaults and verification scope]].

@@ -1,0 +1,29 @@
+#+TITLE: zeta_practice build entry
+
+* Unified build entry
+The root entry uses =./zbuild.py <command> [deliverable ...] --profile release|debug=.
+The profile defaults to =release=. Run =./zbuild.py list= for targets and capabilities,
+and append =--dry-run= to inspect scope without executing. Unsupported actions fail.
+=check= performs non-mutating source/compiler checks; =test= prepares and runs native
+correctness suites. =run= requires an existing output; =dev= builds and runs (or
+uses the application's native watcher). Arguments after =--= are forwarded without
+logging. Cleanup affects the owning native engineering unit and selected profile;
+the plan names affected sibling outputs. Installations, data and shared caches stay intact.
+Host preparation and deployment are separate operations.
+
+Default build/run: =zeta-practice=, the complete Dioxus Web/fullstack application.
+=build= creates both client and server plus public assets; =check= separately
+checks host server and wasm web features (including Clippy) after rustfmt.
+=test= uses host-runnable server-feature tests, not a wasm/browser harness.
+=dev= uses locked Dioxus serve with its native watcher.
+#+begin_src sh
+./zbuild.py doctor
+./zbuild.py check --profile debug
+./zbuild.py test --profile debug
+./zbuild.py build
+./zbuild.py run
+./zbuild.py dev --profile debug
+#+end_src
+Built release server: =target/dx/zeta-practice/release/web/server=, assets beside it
+in =public/=. =run= preserves resource lookup and defaults to local =127.0.0.1:8080=;
+=IP= and =PORT= can override it. Missing output fails without recompilation.

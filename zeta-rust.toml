@@ -1,7 +1,6 @@
 schema = 1
-baseline = "2026.09"
+baseline = "1.97.1-r1"
 manifest = "Cargo.toml"
 toolchain = "rust-toolchain.toml"
-default-profile = "dev"
 dependency-groups = ["dioxus-web-fullstack"]
 native-dependencies = []

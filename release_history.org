@@ -5,6 +5,18 @@
 
 * Release History
 
+** v0.2.1 - 2026-09-24
+*** Release Summary
+- Add a unified Forge-backed build entry for the Web/fullstack application.
+
+*** Changes
+- Add the root =zbuild.py= launcher and project-owned Rust build definition.
+- Document build, check, test, run, dev, profile, and output contracts in =BUILD.org= and link it from the project READMEs.
+- Adopt the immutable Forge Rust baseline =1.97.1-r1=.
+
+*** Compatibility and Upgrade Notes
+- The application behavior is unchanged; build commands now use the unified root entry.
+
 ** v0.2.0 - 2026-09-20
 *** Release Summary
 - Deliver Phase 1 Stage 1.1 with the first runnable Rust/Dioxus Web/Fullstack application foundation.

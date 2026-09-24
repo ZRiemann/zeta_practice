@@ -58,15 +58,15 @@ Do not include in Phase 1:
 * External prerequisite F1 - Zeta Forge
 
 - Owner: =zeta_forge=. Status: =Accepted= in the current local checkout.
-- Acceptance evidence: forge commit =ac4f834= adds =dioxus-web-fullstack= and
-  group-specific doctor checks; =python3 -m unittest tests.test_rust_workspace=
-  passed 8 tests.
-- Actual upstream delivery version: unset; the forge change is committed but
-  has not received a separate release version in this task.
+- Acceptance evidence: forge commit =116d326= delivers the immutable exact
+  version baseline =1.97.1-r1= with =dioxus-web-fullstack=, baseline-isolated
+  Cargo tools, and group-specific doctor checks;
+  =python3 -m unittest tests.test_rust_workspace= passed 15 tests.
+- Actual upstream delivery version: =zeta_forge v0.9.0=.
 
 Before adding production Cargo manifests to this repository:
 
-1. Extend =zeta_forge/rust/baseline.toml= with a reviewed Dioxus Web/Fullstack dependency group.
+1. Extend =zeta_forge/rust/baselines/1.97.1-r1.toml= with a reviewed Dioxus Web/Fullstack dependency group.
 2. Keep the existing managed Dioxus version policy or intentionally upgrade it in =zeta_forge= first.
 3. Add any required server, SQLite, password-hashing, serialization, time, or migration crates to forge governance before use.
 4. Validate the forge Rust baseline and its own tests.

@@ -52,13 +52,14 @@ Phase 1 不包含：
 * 外部前置依赖 F1 - Zeta Forge
 
 - 所属仓库：=zeta_forge=。状态：当前本地 checkout 已 =Accepted=。
-- 验收证据：forge commit =ac4f834= 增加 =dioxus-web-fullstack= 及按依赖组执行的
-  doctor 检查；=python3 -m unittest tests.test_rust_workspace= 通过 8 项测试。
-- 上游实际交付版本：未设置；forge 变更已提交，但本任务未为其分配独立发布版本。
+- 验收证据：forge commit =116d326= 以 =1.97.1-r1= 交付包含
+  =dioxus-web-fullstack= 的不可变精确版本 baseline、按 baseline 隔离的 Cargo 工具及
+  依赖组 doctor 检查；=python3 -m unittest tests.test_rust_workspace= 通过 15 项测试。
+- 上游实际交付版本：=zeta_forge v0.9.0=。
 
 在本仓库加入正式 Cargo manifest 之前：
 
-1. 在 =zeta_forge/rust/baseline.toml= 增加经过审查的 Dioxus Web/Fullstack 依赖组。
+1. 在 =zeta_forge/rust/baselines/1.97.1-r1.toml= 增加经过审查的 Dioxus Web/Fullstack 依赖组。
 2. 保持 forge 当前受管 Dioxus 版本策略；如果要升级，必须先在 =zeta_forge= 完成。
 3. server、SQLite、密码哈希、序列化、时间和 migration 等公共 crate 如需使用，先纳入 forge 治理。
 4. 验证 zeta_forge Rust 基线和自身测试。
