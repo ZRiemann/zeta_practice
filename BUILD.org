@@ -40,3 +40,16 @@ to a release with new migrations; schema migrations are forward-only.
 #+begin_src sh
 ZETA_PRACTICE_DB_PATH=/srv/zeta-practice/practice.sqlite ./zbuild.py run
 #+end_src
+
+* Authentication origin and cookies
+
+Registration, login, and logout require an =Origin= matching
+=ZETA_PRACTICE_PUBLIC_ORIGIN=. For local development the default is
+=http://127.0.0.1:8080=; use that exact address in the browser. Set this
+variable to the externally visible HTTPS origin in deployment, without a
+trailing slash or path. Non-local HTTP origins are rejected at startup.
+HTTPS sets =Secure= on the host-only, =HttpOnly=, =SameSite=Lax= session cookie.
+The cookie expires after seven days; logout revokes only its current session.
+Usernames are case-insensitive and use 3-32 ASCII letters, digits, underscores,
+or hyphens. Passwords use 12-128 UTF-8 bytes and are stored as salted PBKDF2
+hashes. Accounts are created through the public bilingual registration form.

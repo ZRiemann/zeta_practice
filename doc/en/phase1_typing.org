@@ -6,11 +6,11 @@
 * Phase record
 
 - Identifier: =Phase 1=; owner: =zeta_practice=.
-- Status: =In progress=; Stages 1.1-1.2 are delivered and Stages 1.3-1.12 remain planned.
-- Completion evidence: Stage 1.1-1.2 evidence is recorded below; Phase integration
+- Status: =In progress=; Stages 1.1-1.3 are delivered and Stages 1.4-1.12 remain planned.
+- Completion evidence: Stage 1.1-1.3 evidence is recorded below; Phase integration
   acceptance remains unrun.
 - Actual delivery version: unset; Phase 1 is not complete. Current project
-  =VERSION= is =v0.3.0= for the Stage 1.2 delivery.
+  =VERSION= is =v0.4.0= for the Stage 1.3 delivery.
 
 Phase identity is independent of release versions. Each Stage below is one
 cohesive agent task including implementation, verification, documentation, and
@@ -155,9 +155,12 @@ Verify fresh initialization, migration replay, failure reporting, and restart ag
 
 - Owner: =zeta_practice=.
 - Dependencies: Stage 1.2.
-- Status: =Planned=.
-- Completion evidence: none; acceptance checks unrun.
-- Actual delivery version: unset.
+- Status: =Delivered=.
+- Completion evidence: server-feature tests passed 10 tests covering account and
+  session isolation, credentials, revocation, expiry, restart, cookies, origins,
+  migration replay and localized feedback. Locked offline server and Web-target
+  checks passed. Full build and live browser flow were not run.
+- Actual delivery version: =v0.4.0=.
 
 ** Deliverable and boundary
 

@@ -13,7 +13,8 @@ body {
 }
 
 button,
-a {
+a,
+input {
     font: inherit;
 }
 
@@ -53,6 +54,61 @@ nav {
     display: flex;
     gap: 1rem;
     margin-right: auto;
+}
+
+.nav-button {
+    border: 0;
+    background: none;
+    color: #31513f;
+    cursor: pointer;
+    padding: 0;
+}
+
+.auth-card {
+    max-width: 34rem;
+}
+
+.auth-card form,
+.auth-card label {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.auth-card form {
+    gap: 1rem;
+}
+
+.auth-card input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccd4c9;
+    border-radius: 0.5rem;
+}
+
+.auth-card button[type="submit"] {
+    padding: 0.75rem 1rem;
+    border: 0;
+    border-radius: 0.5rem;
+    color: white;
+    background: #1d6d4b;
+    cursor: pointer;
+}
+
+.auth-card button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.mode-toggle {
+    margin-top: 1rem;
+    border: 0;
+    color: #31513f;
+    background: transparent;
+    cursor: pointer;
+}
+
+.form-error {
+    color: #a42d2d;
 }
 
 a {

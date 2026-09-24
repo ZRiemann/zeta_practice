@@ -25,14 +25,14 @@
 
 * 当前版本
 
-=v0.3.0= 在 Stage 1.1 的应用基础上交付 Stage 1.2 的 SQLite 初始化与有序迁移。
+=v0.4.0= 在 Stage 1.2 的 SQLite 基础上交付 Stage 1.3 的注册、登录会话与双语登录界面。
 实际版本化变更见 [[file:./release_history.org][发布历史]]。
 
 * Phase 路线
 
 =Phase 1 - Typing= 通过 Stage 1.1-1.12 交付首个完整 Web typing 练习闭环，并单独记录
-=zeta_forge= 前置依赖。Stage 1.1 和 1.2 分别在 =v0.2.0= 与 =v0.3.0= 交付，
-Stage 1.3-1.12 仍为规划状态。
+=zeta_forge= 前置依赖。Stage 1.1-1.3 已在 =v0.4.0= 之前交付，
+Stage 1.4-1.12 仍为规划状态。
 Phase 标识与发布版本相互独立。
 
 目标、边界、Stage 依赖、验收条件及旧规划映射见

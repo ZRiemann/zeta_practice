@@ -101,6 +101,11 @@ Passwords are never stored directly. Production implementation must use a
 reviewed password-hashing algorithm such as Argon2id and server-side sessions.
 Browser authentication should use secure cookies with appropriate =HttpOnly=,
 =Secure=, and =SameSite= settings when deployed over HTTPS.
+Stage 1.3 uses server-side revocable sessions backed by SQLite. Only a random
+session token is sent to the browser; the database stores its digest. A
+host-only cookie and explicit public-origin check protect state-changing
+authentication requests. The application shell resolves the current user on
+the server; later modules use that boundary rather than client-supplied IDs.
 
 Role handling should remain minimal. A future parent/admin role may manage
 student accounts and inspect statistics, but Phase 1 must not introduce a large

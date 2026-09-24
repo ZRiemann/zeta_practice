@@ -11,6 +11,14 @@ impl Locale {
             Self::EnUs => "en-US",
         }
     }
+
+    pub(crate) fn from_language_tag(tag: &str) -> Self {
+        if tag == "en-US" {
+            Self::EnUs
+        } else {
+            Self::ZhCn
+        }
+    }
 }
 
 pub(crate) struct Messages {
@@ -24,6 +32,19 @@ pub(crate) struct Messages {
     pub(crate) about_title: &'static str,
     pub(crate) about_body: &'static str,
     pub(crate) stage_label: &'static str,
+    pub(crate) login: &'static str,
+    pub(crate) register: &'static str,
+    pub(crate) logout: &'static str,
+    pub(crate) username: &'static str,
+    pub(crate) password: &'static str,
+    pub(crate) welcome: &'static str,
+    pub(crate) login_hint: &'static str,
+    pub(crate) register_hint: &'static str,
+    pub(crate) invalid_input: &'static str,
+    pub(crate) username_taken: &'static str,
+    pub(crate) invalid_credentials: &'static str,
+    pub(crate) login_required: &'static str,
+    pub(crate) request_failed: &'static str,
 }
 
 pub(crate) const fn messages(locale: Locale) -> &'static Messages {
@@ -43,7 +64,20 @@ const ZH_CN: Messages = Messages {
     start_hint: "应用基础已就绪；打字功能将在后续 Stage 中加入。",
     about_title: "关于 Zeta Practice",
     about_body: "这是一个 Web-first、多用户能力练习平台。",
-    stage_label: "Phase 1 · Stage 1.1 应用基础",
+    stage_label: "Phase 1 · Stage 1.3 账户与登录",
+    login: "登录",
+    register: "注册",
+    logout: "注销",
+    username: "用户名",
+    password: "密码",
+    welcome: "欢迎，",
+    login_hint: "使用用户名和密码登录。",
+    register_hint: "创建账户后即可登录。用户名需为 3–32 位英文字母、数字、下划线或连字符；密码需为 12–128 字节。",
+    invalid_input: "请检查用户名、密码和语言设置。",
+    username_taken: "用户名已被使用。",
+    invalid_credentials: "用户名或密码错误。",
+    login_required: "请先登录。",
+    request_failed: "操作失败，请稍后再试。",
 };
 
 const EN_US: Messages = Messages {
@@ -56,7 +90,20 @@ const EN_US: Messages = Messages {
     start_hint: "The application foundation is ready; typing arrives in later Stages.",
     about_title: "About Zeta Practice",
     about_body: "A Web-first, multi-user platform for focused skill practice.",
-    stage_label: "Phase 1 · Stage 1.1 application foundation",
+    stage_label: "Phase 1 · Stage 1.3 accounts and login",
+    login: "Log in",
+    register: "Register",
+    logout: "Log out",
+    username: "Username",
+    password: "Password",
+    welcome: "Welcome, ",
+    login_hint: "Log in with your username and password.",
+    register_hint: "Create an account to sign in. Usernames use 3–32 letters, digits, underscores or hyphens; passwords use 12–128 bytes.",
+    invalid_input: "Check the username, password, and language.",
+    username_taken: "That username is taken.",
+    invalid_credentials: "Incorrect username or password.",
+    login_required: "Please log in first.",
+    request_failed: "The request failed. Please try again.",
 };
 
 #[cfg(test)]
@@ -69,5 +116,7 @@ mod tests {
         assert_eq!(Locale::EnUs.language_tag(), "en-US");
         assert_eq!(messages(Locale::ZhCn).home, "首页");
         assert_eq!(messages(Locale::EnUs).home, "Home");
+        assert_eq!(messages(Locale::ZhCn).login, "登录");
+        assert_eq!(messages(Locale::EnUs).register, "Register");
     }
 }

@@ -5,6 +5,19 @@
 
 * Release History
 
+** v0.4.0 - 2026-09-24
+*** Release Summary
+- Deliver Phase 1 Stage 1.3 with account registration, login sessions, and bilingual login UI.
+
+*** Changes
+- Add account, user setting, and revocable session tables through the second SQLite migration.
+- Add case-insensitive username registration, salted PBKDF2 password verification, and seven-day server-side sessions.
+- Add Dioxus registration, login, logout, and current-user endpoints with host-only cookies and origin checks.
+- Add bilingual account UI, authentication tests, and deployment origin guidance.
+
+*** Compatibility and Upgrade Notes
+- Set =ZETA_PRACTICE_PUBLIC_ORIGIN= to the external HTTPS origin for deployment; local development defaults to =http://127.0.0.1:8080=. Back up the SQLite database before this forward-only migration. Full build and live browser flow were not run.
+
 ** v0.3.1 - 2026-09-24
 *** Release Summary
 - Adapt the Rust workspace to the Forge toolchain and approved dependency catalog.

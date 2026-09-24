@@ -4156,10 +4156,13 @@ dependencies = [
 
 [[package]]
 name = "zeta-practice"
-version = "0.3.1"
+version = "0.4.0"
 dependencies = [
  "dioxus",
+ "ring",
  "rusqlite",
+ "serde",
+ "tokio",
 ]
 
 [[package]]

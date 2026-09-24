@@ -8,11 +8,18 @@ use std::time::Duration;
 use rusqlite::{Connection, TransactionBehavior, params};
 
 const DATABASE_PATH_ENV: &str = "ZETA_PRACTICE_DB_PATH";
-const MIGRATIONS: &[Migration] = &[Migration {
-    version: 1,
-    name: "storage_metadata",
-    sql: include_str!("../migrations/0001_storage_metadata.sql"),
-}];
+const MIGRATIONS: &[Migration] = &[
+    Migration {
+        version: 1,
+        name: "storage_metadata",
+        sql: include_str!("../migrations/0001_storage_metadata.sql"),
+    },
+    Migration {
+        version: 2,
+        name: "accounts",
+        sql: include_str!("../migrations/0002_accounts.sql"),
+    },
+];
 
 struct Migration {
     version: i64,
@@ -35,6 +42,12 @@ pub(crate) fn initialize_from_env() -> Result<(), StorageError> {
     initialize_configured(env::var_os(DATABASE_PATH_ENV)).map(|_| ())
 }
 
+pub(crate) fn open_from_env() -> Result<Connection, StorageError> {
+    let path = env::var_os(DATABASE_PATH_ENV)
+        .ok_or_else(|| StorageError(format!("{DATABASE_PATH_ENV} is required")))?;
+    open_connection(&PathBuf::from(path))
+}
+
 fn initialize_configured(value: Option<OsString>) -> Result<Connection, StorageError> {
     let path = value.ok_or_else(|| StorageError(format!("{DATABASE_PATH_ENV} is required")))?;
     let path = PathBuf::from(path);
@@ -42,13 +55,19 @@ fn initialize_configured(value: Option<OsString>) -> Result<Connection, StorageE
 }
 
 fn initialize(path: &Path) -> Result<Connection, StorageError> {
+    let mut connection = open_connection(path)?;
+    apply_migrations(&mut connection, MIGRATIONS)?;
+    Ok(connection)
+}
+
+fn open_connection(path: &Path) -> Result<Connection, StorageError> {
     if !path.is_absolute() || path.file_name().is_none() {
         return Err(StorageError(format!(
             "{DATABASE_PATH_ENV} must be an absolute database file path: {}",
             path.display()
         )));
     }
-    let mut connection = Connection::open(path).map_err(|error| {
+    let connection = Connection::open(path).map_err(|error| {
         StorageError(format!("cannot open database {}: {error}", path.display()))
     })?;
     connection
@@ -57,7 +76,6 @@ fn initialize(path: &Path) -> Result<Connection, StorageError> {
     connection
         .pragma_update(None, "foreign_keys", "ON")
         .map_err(|error| StorageError(format!("cannot enable foreign keys: {error}")))?;
-    apply_migrations(&mut connection, MIGRATIONS)?;
     Ok(connection)
 }
 
@@ -192,7 +210,7 @@ mod tests {
                 row.get(0)
             })
             .expect("read history");
-        assert_eq!(count, 1);
+        assert_eq!(count, 2);
         drop(connection);
         fs::remove_file(&path).expect("remove test database");
         fs::remove_dir(path.parent().expect("test directory")).expect("remove test directory");
@@ -231,7 +249,10 @@ mod tests {
         let mut connection = Connection::open_in_memory().expect("memory database");
         apply_migrations(&mut connection, MIGRATIONS).expect("initial migration");
         connection
-            .execute("UPDATE schema_migrations SET name = 'other'", [])
+            .execute(
+                "UPDATE schema_migrations SET name = 'other' WHERE version = 1",
+                [],
+            )
             .expect("tamper history");
         let error = apply_migrations(&mut connection, MIGRATIONS).expect_err("mismatch must fail");
         assert!(error.to_string().contains("history mismatch"));
