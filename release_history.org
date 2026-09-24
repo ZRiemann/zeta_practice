@@ -5,6 +5,18 @@
 
 * Release History
 
+** v0.3.1 - 2026-09-24
+*** Release Summary
+- Adapt the Rust workspace to the Forge toolchain and approved dependency catalog.
+
+*** Changes
+- Replace the legacy baseline selector with schema 2 capability selection and remove obsolete workspace baseline metadata.
+- Clarify current catalog ownership in the architecture documents while retaining historical Stage 1.1 notes.
+- Synchronize the workspace package, lockfile, and repository version.
+
+*** Compatibility and Upgrade Notes
+- Use the current Forge build engine with the schema 2 =zeta-rust.toml= configuration. Builds and tests were not rerun for this commit.
+
 ** v0.3.0 - 2026-09-24
 *** Release Summary
 - Deliver Phase 1 Stage 1.2 with server-side SQLite initialization and ordered migrations.

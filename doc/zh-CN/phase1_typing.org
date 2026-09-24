@@ -57,6 +57,9 @@ Phase 1 不包含：
   依赖组 doctor 检查；=python3 -m unittest tests.test_rust_workspace= 通过 15 项测试。
 - 上游实际交付版本：=zeta_forge v0.9.0=。
 
+以下步骤记录 Stage 1.1 当时的前置条件。当前新增依赖应按架构文档使用 Forge
+批准目录。
+
 在本仓库加入正式 Cargo manifest 之前：
 
 1. 在 =zeta_forge/rust/baselines/1.97.1-r1.toml= 增加经过审查的 Dioxus Web/Fullstack 依赖组。

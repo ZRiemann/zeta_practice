@@ -64,6 +64,10 @@ Do not include in Phase 1:
   =python3 -m unittest tests.test_rust_workspace= passed 15 tests.
 - Actual upstream delivery version: =zeta_forge v0.9.0=.
 
+The following steps record the original Stage 1.1 prerequisite. For current
+dependency additions, use Forge's approved catalog as described in the
+architecture document.
+
 Before adding production Cargo manifests to this repository:
 
 1. Extend =zeta_forge/rust/baselines/1.97.1-r1.toml= with a reviewed Dioxus Web/Fullstack dependency group.

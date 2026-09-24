@@ -2,11 +2,8 @@
 members = ["app"]
 resolver = "2"
 
-[workspace.metadata.zeta-forge]
-baseline = "1.97.1-r3"
-
 [workspace.package]
-version = "0.3.0"
+version = "0.3.1"
 edition = "2024"
 rust-version = "1.97"
 license = "Apache-2.0"

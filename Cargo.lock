@@ -4156,7 +4156,7 @@ dependencies = [
 
 [[package]]
 name = "zeta-practice"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "dioxus",
  "rusqlite",

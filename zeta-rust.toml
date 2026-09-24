@@ -1,6 +1,5 @@
-schema = 1
-baseline = "1.97.1-r3"
+schema = 2
 manifest = "Cargo.toml"
 toolchain = "rust-toolchain.toml"
-dependency-groups = ["dioxus-web-fullstack", "sqlite"]
+capabilities = ["dioxus-web-fullstack"]
 native-dependencies = []

@@ -140,20 +140,20 @@ coordination are explicitly outside the initial architecture.
 =zeta_forge= is the authority for ZetaX Rust toolchains and public third-party
 Rust dependency versions.
 
-The current forge baseline is selected by a project-local =zeta-rust.toml=.
-The project owns its Rust source, workspace members, application features, and
-committed =Cargo.lock=. Workspace members inherit managed direct dependencies
-with =workspace = true= and must match the forge baseline.
+The project-local =zeta-rust.toml= selects a Forge-approved toolchain and the
+=dioxus-web-fullstack= capability. The project owns its Rust source, workspace
+members, application features, and committed =Cargo.lock=. Workspace members
+inherit direct dependencies with =workspace = true=; workspace declarations
+must use exact versions and sources approved in the Forge catalog.
 
 Cargo remains the Rust resolver/build tool; it is not an independent dependency
 governance source for ZetaX projects.
 
-If a required public crate, feature baseline, or Dioxus target group is absent
-from =zeta_forge=, extend and validate =zeta_forge= first. Do not work around
-that gap by pinning a competing direct dependency baseline in =zeta_practice=.
+If a required public crate or tool version is absent from =zeta_forge=, approve
+and validate that catalog entry first. Application features remain project-owned,
+apart from explicit catalog constraints such as =rusqlite/bundled=.
 
-For the v0.2.0 Stage 1.1 delivery, forge provides Dioxus 0.7.10 through the
-=dioxus-web-fullstack= group and validates the pinned Dioxus CLI plus Web Rust
+Forge approves Dioxus 0.7.10 and validates the matching CLI plus Web Rust
 target when that capability is selected. The application owns its =web= and
 =server= feature composition.
 

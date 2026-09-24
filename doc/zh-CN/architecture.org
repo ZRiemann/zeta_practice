@@ -128,17 +128,18 @@ PostgreSQL、Redis、分布式缓存、消息队列和多节点数据库协调�
 
 =zeta_forge= 是 ZetaX Rust toolchain 和公共第三方 Rust 依赖版本的统一权威来源。
 
-业务仓库通过根目录 =zeta-rust.toml= 选择 forge 基线。本仓库拥有自己的 Rust 源码、
-workspace 成员、业务 feature 组合和提交到仓库的 =Cargo.lock=。workspace member 通过
-=workspace = true= 继承受管直接依赖，声明必须与 forge 基线一致。
+业务仓库通过根目录 =zeta-rust.toml= 声明 Forge 批准的工具链和
+=dioxus-web-fullstack= 能力。本仓库拥有自己的 Rust 源码、workspace 成员、业务
+feature 组合和提交到仓库的 =Cargo.lock=。workspace member 通过 =workspace = true=
+继承直接依赖，workspace 只能选择 Forge 目录批准的精确版本与来源。
 
 Cargo 仍然负责 Rust 依赖解析和构建，但不是 ZetaX 的独立依赖治理来源。
 
-如果需要的公共 crate、feature 基线或 Dioxus target group 尚未进入 =zeta_forge=，
-必须先扩展并验证 =zeta_forge=，不能在 =zeta_practice= 中建立另一套直接依赖版本基线。
+如果需要的公共 crate 或工具版本尚未进入 =zeta_forge=，必须先批准目录条目并验证。
+普通业务 feature 由项目组合；=rusqlite/bundled= 等明确约束仍由 Forge 检查。
 
-在 v0.2.0 Stage 1.1 交付中，forge 通过 =dioxus-web-fullstack= 组管理 Dioxus
-0.7.10，并在选择该能力时检查固定版本的 Dioxus CLI 与 Web Rust target。应用拥有自己的
+Forge 批准 Dioxus 0.7.10，并在选择 =dioxus-web-fullstack= 能力时检查匹配版本的
+Dioxus CLI 与 Web Rust target。应用拥有自己的
 =web= 和 =server= feature 组合。
 
 * 演进原则

@@ -39,8 +39,8 @@ or operational requirements justify a more complex topology.
 
 Rust public dependency versions and toolchains are governed centrally by
 =zeta_forge=. This repository owns its application source, workspace structure,
-feature choices, and =Cargo.lock=, but it must not establish a competing
-third-party Rust dependency baseline.
+feature choices, and =Cargo.lock=. Its direct dependencies must use exact
+versions and sources approved in the Forge catalog.
 
 * Documentation
 
